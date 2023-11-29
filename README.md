@@ -7,7 +7,7 @@ You can access this challenge here: [8weekschallenge](https://8weeksqlchallenge.
 
 This repository shows my ability and proficiency in tackling business problems using query language SQL. The case studies touches different business problem scenario and in different business context. I approached it in a adhoc request and delivery format(Question and Answer)
 
-<a href="placeholder.com" target="_blank">Opens in new tab</a>
+**https://www.linkedin.com/company/datawithdanny**
 
 ## Table of contents
 
