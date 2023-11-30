@@ -34,7 +34,7 @@ You can inspect the entity relationship diagram and example data below.
 
 
 ```mySQL
--- What is the total amount each customer spent at the restaurant?
+-- 1. What is the total amount each customer spent at the restaurant?
 SELECT
   customer_id,
   SUM(price) AS Total_spent
@@ -45,4 +45,18 @@ GROUP BY
   customer_id
 ORDER BY
   Total_spent DESC;
+```
+
+
+```mySQL
+-- 2. How many days has each customer visited the store?
+
+SELECT
+  customer_id,
+  COUNT(order_date) AS number_of_days
+FROM
+  sales
+GROUP BY
+  customer_id;
+
 ```
