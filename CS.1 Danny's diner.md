@@ -60,3 +60,40 @@ GROUP BY
   customer_id;
 
 ```
+
+
+```mySQL
+-- 3. What was the first item from the menu purchased by each customer?
+
+WITH ranked_sales AS (
+  SELECT
+    s.customer_id,
+    s.order_date,
+    m.product_name,
+    ROW_NUMBER() OVER(PARTITION BY s.customer_id ORDER BY s.order_date) AS row_num
+  FROM sales s
+  JOIN menu m ON s.product_id = m.product_id
+)
+
+SELECT customer_id, order_date AS first_order_date, product_name
+FROM ranked_sales
+WHERE row_num = 1;
+```
+
+
+```mySQL
+-- 4. What is the most purchased item on the menu and how many times was it purchased by all customers?
+
+SELECT
+  sales.product_id,
+  product_name,
+  COUNT(sales.product_id) AS no_of_product
+FROM
+  sales
+  JOIN menu ON sales.product_id = menu.product_id
+GROUP BY
+  sales.product_id,
+  menu.product_name
+ORDER BY no_of_product DESC LIMIT 1
+;
+```
