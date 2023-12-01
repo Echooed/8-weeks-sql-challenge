@@ -97,3 +97,19 @@ GROUP BY
 ORDER BY no_of_product DESC LIMIT 1
 ;
 ```
+
+```mysql
+-- 5. How many times was the most purchased item purchased by each customer?
+
+
+SELECT customer_id, product_name, COUNT(*) AS num_times_purchased FROM sales
+JOIN menu
+ON sales.product_id = menu.product_id
+WHERE sales.product_id = (SELECT sales.product_id FROM sales
+JOIN menu
+ON sales.product_id = menu.product_id
+GROUP BY sales.product_id
+ORDER BY count(*) DESC
+limit 1)
+GROUP BY customer_id, product_name;
+```
