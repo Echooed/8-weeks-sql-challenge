@@ -80,9 +80,8 @@ FROM ranked_sales
 WHERE row_num = 1;
 ```
 
-
 ```mySQL
--- 4. What is the most purchased item on the menu and how many times was it purchased by all customers?
+-- 3b. What is the most purchased item on the menu and how many times was it purchased by all customers?
 
 SELECT
   sales.product_id,
@@ -98,9 +97,9 @@ ORDER BY no_of_product DESC LIMIT 1
 ;
 ```
 
-```mysql
--- 5. How many times was the most purchased item purchased by each customer?
 
+```mysql
+-- 4. How many times was the most purchased item purchased by each customer?
 
 SELECT customer_id, product_name, COUNT(*) AS num_times_purchased FROM sales
 JOIN menu
@@ -112,6 +111,21 @@ GROUP BY sales.product_id
 ORDER BY count(*) DESC
 limit 1)
 GROUP BY customer_id, product_name;
+```
+
+```mysql
+-- 5. Which item was the most popular for each customer?
+
+WITH count_product AS (
+    SELECT s.customer_id, m.product_name, COUNT(s.product_id) AS no_of_product,
+           ROW_NUMBER() OVER(PARTITION BY s.customer_id ORDER BY COUNT(s.product_id) DESC) AS row_num
+    FROM sales s
+    JOIN menu m ON s.product_id = m.product_id
+    GROUP BY s.customer_id, m.product_name
+)
+SELECT c.customer_id, c.product_name, c.no_of_product
+FROM count_product c
+WHERE c.row_num = 1;
 ```
 
 ```mysql
@@ -130,22 +144,7 @@ WHERE c.row_num = 1;
 ```
 
 ```mysql
--- 7. Which item was the most popular for each customer?
-
-WITH count_product AS (
-    SELECT s.customer_id, m.product_name, COUNT(s.product_id) AS no_of_product,
-           ROW_NUMBER() OVER(PARTITION BY s.customer_id ORDER BY COUNT(s.product_id) DESC) AS row_num
-    FROM sales s
-    JOIN menu m ON s.product_id = m.product_id
-    GROUP BY s.customer_id, m.product_name
-)
-SELECT c.customer_id, c.product_name, c.no_of_product
-FROM count_product c
-WHERE c.row_num = 1;
-```
-
-```mysql
--- 8. Which item was purchased just before the customer became a member?
+-- 7. Which item was purchased just before the customer became a member?
 
 WITH last_order_before_membership AS (
   SELECT
@@ -177,7 +176,7 @@ WHERE
 
 ```mysql
 
--- 9. What is the total items and amount spent for each member before they became a member?
+-- 8. What is the total items and amount spent for each member before they became a member?
 
 SELECT
   s.customer_id,
@@ -196,7 +195,7 @@ GROUP BY
 
 ```mysql
 
--- 10. If each $1 spent equates to 10 points and sushi has a 2x points multiplier - how many points would each customer have?
+-- 9. If each $1 spent equates to 10 points and sushi has a 2x points multiplier - how many points would each customer have?
 
 WITH purchase_point AS (
   SELECT
@@ -222,5 +221,43 @@ FROM
   purchase_point
 GROUP BY
   customer_id
+```
+
+```mysql
+
+-- 10. In the first week after a customer joins the program (including their join date) they earn 2x points on all items,  not just sushi - how many points do customer A and B have at the end of January?
+
+WITH joined_members AS (
+    SELECT
+        mem.customer_id,
+        mem.join_date
+    FROM members mem
+    WHERE EXTRACT(YEAR_MONTH FROM mem.join_date) = 202101
+),
+customer_points AS (
+    SELECT
+        s.customer_id,
+        m.price,
+        m.product_name,
+        s.order_date,
+        j.join_date
+    FROM sales s
+    JOIN menu m ON s.product_id = m.product_id
+    JOIN members j ON s.customer_id = j.customer_id
+    WHERE s.order_date >= j.join_date
+      AND s.order_date < DATE_ADD(j.join_date, INTERVAL 1 WEEK)
+      
+),
+all_points AS (
+    SELECT
+        customer_id,
+        SUM(CASE 
+            WHEN DATEDIFF(order_date, join_date) <= 7 THEN price * 20
+            ELSE price * 10
+        END) AS total_points
+    FROM customer_points
+    GROUP BY customer_id
+)
+SELECT customer_id, CONCAT(total_points, " ", "points") members_points FROM all_points;
 ```
 
