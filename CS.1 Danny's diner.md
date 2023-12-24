@@ -261,3 +261,58 @@ all_points AS (
 SELECT customer_id, CONCAT(total_points, " ", "points") members_points FROM all_points;
 ```
 
+## Bonus question
+
+```mysql
+-- 1. Create a basic data table for Danny's employees
+
+SELECT
+  sales.customer_id,
+  sales.order_date,
+  menu.product_name,
+  menu.price,
+  CASE
+    WHEN sales.order_date < members.join_date THEN "N"
+    WHEN sales.order_date >= members.join_date THEN "Y"
+    ELSE "N"
+  END AS member
+FROM
+  sales
+  JOIN menu ON sales.product_id = menu.product_id
+  LEFT JOIN members ON sales.customer_id = members.customer_id
+ORDER BY
+  customer_id;
+```
+
+
+
+Danny also requires further information about the ranking of customer products, but he purposely does not need the ranking for non-member purchases so he expects null ranking values for the records when customers are not yet part of the loyalty program.
+
+```mysql
+-- 2. Rank All The Things
+
+WITH joined_table AS (
+    SELECT sales.customer_id, 
+           sales.order_date, 
+           menu.product_name, 
+           menu.price,
+           CASE 
+               WHEN sales.order_date < members.join_date THEN "N"
+               WHEN sales.order_date >= members.join_date THEN "Y"			
+               ELSE "N"
+           END AS member
+    FROM sales 
+    JOIN menu ON sales.product_id = menu.product_id
+    LEFT JOIN members ON sales.customer_id = members.customer_id 
+    ORDER BY customer_id
+)
+SELECT customer_id, 
+       order_date, 
+       product_name, 
+       price, 
+       member,
+       CASE WHEN member = "N" THEN "null"
+          ELSE RANK() OVER (PARTITION BY member, customer_id ORDER BY order_date, price DESC)
+       END AS ranking
+FROM joined_table;
+```
