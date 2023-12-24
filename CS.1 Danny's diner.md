@@ -113,3 +113,114 @@ ORDER BY count(*) DESC
 limit 1)
 GROUP BY customer_id, product_name;
 ```
+
+```mysql
+-- 6. Which item was the most popular for each customer?
+
+WITH count_product AS (
+    SELECT s.customer_id, m.product_name, COUNT(s.product_id) AS no_of_product,
+           ROW_NUMBER() OVER(PARTITION BY s.customer_id ORDER BY COUNT(s.product_id) DESC) AS row_num
+    FROM sales s
+    JOIN menu m ON s.product_id = m.product_id
+    GROUP BY s.customer_id, m.product_name
+)
+SELECT c.customer_id, c.product_name, c.no_of_product
+FROM count_product c
+WHERE c.row_num = 1;
+```
+
+```mysql
+-- 7. Which item was the most popular for each customer?
+
+WITH count_product AS (
+    SELECT s.customer_id, m.product_name, COUNT(s.product_id) AS no_of_product,
+           ROW_NUMBER() OVER(PARTITION BY s.customer_id ORDER BY COUNT(s.product_id) DESC) AS row_num
+    FROM sales s
+    JOIN menu m ON s.product_id = m.product_id
+    GROUP BY s.customer_id, m.product_name
+)
+SELECT c.customer_id, c.product_name, c.no_of_product
+FROM count_product c
+WHERE c.row_num = 1;
+```
+
+```mysql
+-- 8. Which item was purchased just before the customer became a member?
+
+WITH last_order_before_membership AS (
+  SELECT
+    s.customer_id,
+    m.product_name,
+    s.order_date,
+    ROW_NUMBER() OVER (
+      PARTITION BY s.customer_id
+      ORDER BY
+        s.order_date DESC
+    ) AS purchase_rank
+  FROM
+    sales s
+    JOIN menu m ON s.product_id = m.product_id
+    JOIN members mem ON s.customer_id = mem.customer_id
+  WHERE
+    s.order_date < mem.join_date
+)
+SELECT
+  customer_id,
+  product_name,
+  order_date
+FROM
+  last_order_before_membership
+WHERE
+  purchase_rank = 1;
+```
+
+
+```mysql
+
+-- 9. What is the total items and amount spent for each member before they became a member?
+
+SELECT
+  s.customer_id,
+  COUNT(s.product_id) AS purchase_count,
+  CONCAT("$", SUM(m.price)) AS total_purchase
+FROM
+  sales s
+  JOIN menu m ON s.product_id = m.product_id
+  JOIN members mem ON s.customer_id = mem.customer_id
+WHERE
+  s.order_date < mem.join_date
+GROUP BY
+  s.customer_id;
+```
+
+
+```mysql
+
+-- 10. If each $1 spent equates to 10 points and sushi has a 2x points multiplier - how many points would each customer have?
+
+WITH purchase_point AS (
+  SELECT
+    s.customer_id,
+    SUM(m.price) AS total_spent,
+    CASE
+      WHEN product_name = "sushi" THEN SUM(m.price) * 20
+      ELSE SUM(m.price) * 10
+    END AS cust_point
+  FROM
+    sales s
+    JOIN menu m ON s.product_id = m.product_id
+  GROUP BY
+    s.customer_id,
+    m.product_name
+  ORDER BY
+    cust_point DESC
+)
+SELECT
+  customer_id,
+  CONCAT(SUM(cust_point), " ", "points") AS customer_points
+FROM
+  purchase_point
+GROUP BY
+  customer_id
+```
+
