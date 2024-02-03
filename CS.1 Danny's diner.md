@@ -19,7 +19,7 @@ You can inspect the entity relationship diagram and example data below.
 
 ![image](https://github.com/Echooed/8-weeks-sql-challenge/assets/91009365/e307009d-3372-44fb-8e03-5c3e3093790a)
 
-## Questions
+## Requests
 
 1. What is the total amount each customer spent at the restaurant?
 2. How many days has each customer visited the restaurant?
