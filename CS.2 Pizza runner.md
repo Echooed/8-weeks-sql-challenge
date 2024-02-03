@@ -1,6 +1,8 @@
-## SECOND CASE STUDY 2
+## CASE STUDY 2
 
 ### Pizza Runner
+![pizza runner img](https://github.com/Echooed/8-weeks-sql-challenge/assets/91009365/a27f1d6a-c5a6-44b6-ab1d-4ae128286ca7)
+
 
 Objective: Danny needs the data cleaned
 
@@ -42,4 +44,14 @@ You are required to provide SQL queries for each of the tasks outlined in the pr
 ---
 
 This problem statement outlines the context, objectives, data overview, areas of focus, and expected deliverables for the data optimization task. Feel free to customize it further based on specific details or additional requirements!
+
+<div align="center">
+
+### **Entity Relationship Diagram**
+
+</div>
+
+<p align="center">
+<img src="https://github.com/Echooed/8-weeks-sql-challenge/assets/91009365/b4deeed1-4987-49d4-95ad-e52c9e92ae7f"/>
+</p>
 
