@@ -19,7 +19,14 @@ The primary goal is to assist Danny in improving Pizza Runner's operations by ad
 **Data Overview:**
 
 - The dataset includes information on runners' registration dates, customer orders with pizza details, runner assignments, and pizza recipes with toppings.
-- Tables: runners, customer_orders, runner_orders, pizza_names, pizza_recipes, and pizza_toppings.
+
+**Tables available in the database**
+- `runners`
+- `customer_orders`
+- `runner_orders`
+- `pizza_names`
+- `pizza_recipes`
+- `pizza_toppings`
 
 **Areas of Focus:**
 
@@ -39,11 +46,11 @@ The primary goal is to assist Danny in improving Pizza Runner's operations by ad
     - Delete all canceled orders.
 
 **Deliverables:**
-You are required to provide SQL queries for each of the tasks outlined in the problem statement. The queries should be well-structured, efficient, and capable of producing actionable insights to optimize Pizza Runner's operations.
+I am required to provide SQL queries for each of the tasks outlined in the problem statement. The queries should be well-structured, efficient, and capable of producing actionable insights to optimize Pizza Runner's operations.
 
 ---
 
-This problem statement outlines the context, objectives, data overview, areas of focus, and expected deliverables for the data optimization task. Feel free to customize it further based on specific details or additional requirements!
+This problem statement outlines the context, objectives, data overview, areas of focus, and expected deliverables for the data optimization task.
 
 <div align="center">
 
@@ -55,3 +62,30 @@ This problem statement outlines the context, objectives, data overview, areas of
 <img src="https://github.com/Echooed/8-weeks-sql-challenge/assets/91009365/b4deeed1-4987-49d4-95ad-e52c9e92ae7f"/>
 </p>
 
+    
+## Case study Requests
+_The request is categorised into 4 sections depending on the area of focus_;
+
+a). *Pizza Metrics*
+
+b). *Runner and Customer Experience*
+
+c). *Ingredient Optimisation*
+
+d). *Pricing and Ratings*
+
+e). *Bonus DML Challenges (DML = Data Manipulation Language)*
+
+
+## A. Pizza Metrics
+
+1. How many pizzas were ordered?
+2. How many unique customer orders were made?
+3. How many successful orders were delivered by each runner?
+4. How many of each type of pizza was delivered?
+5. How many Vegetarian and Meatlovers were ordered by each customer?
+6. What was the maximum number of pizzas delivered in a single order?
+7. For each customer, how many delivered pizzas had at least 1 change and how many had no changes?
+8. How many pizzas were delivered that had both exclusions and extras?
+9. What was the total volume of pizzas ordered for each hour of the day?
+10. What was the volume of orders for each day of the week?
