@@ -76,8 +76,10 @@ d). *Pricing and Ratings*
 
 e). *Bonus DML Challenges (DML = Data Manipulation Language)*
 
+## Case study Requests
 
-## A. Pizza Metrics
+
+### A. Pizza Metrics
 
 1. How many pizzas were ordered?
 2. How many unique customer orders were made?
@@ -89,3 +91,32 @@ e). *Bonus DML Challenges (DML = Data Manipulation Language)*
 8. How many pizzas were delivered that had both exclusions and extras?
 9. What was the total volume of pizzas ordered for each hour of the day?
 10. What was the volume of orders for each day of the week?
+
+### Queries
+#### Data investigation and cleaning
+The first course of action is to inspect the data tables been presented before querying.
+There are 5 tables in the pizza runner database. Each table will undergo:
+1. Row count inspection
+2. Duplicate and record frequency checks
+3. Single column frequency count
+4. Summary statistic
+5. Check cumulative Distribution
+6. Investigate outlier
+7. Remove outlier
+8. Create Temp table
+9. Frequency Distribution
+
+At the end of this data general data investigation and cleaning, I will have an overview understanding of what the data is and I will I a clean and optimize data to query all request effectively.
+
+
+
+
+``` mysql
+-- 1. How many pizzas were ordered?
+
+SELECT
+  COUNT(order_id) AS number_of_orders
+FROM
+  customer_orders;
+```
+**The total number  of orders is 14
