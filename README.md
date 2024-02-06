@@ -12,3 +12,5 @@ This repository shows my ability and proficiency in tackling business problems u
 
 #### [Case study #1:Danny's Diner](https://github.com/Echooed/8-weeks-sql-challenge/blob/main/CS.1%20Danny's%20diner.md)
 
+#### [Case study #2:Pizza runner](https://github.com/Echooed/8-weeks-sql-challenge/blob/main/CS.2%20Pizza%20runner.md)
+
