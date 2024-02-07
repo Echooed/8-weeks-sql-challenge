@@ -11,7 +11,7 @@ Objective: Danny needs the data cleaned
 **Problem Statement: Pizza Runner Data Optimization**
 
 **Background:**
-Danny, the owner of Pizza Runner, is keen on leveraging data science to enhance the efficiency and performance of his pizza delivery business. He has shared a dataset containing information about runners, customer orders, and pizza details within the pizza_runner database schema. As a data scientist, your task is to analyze the data, clean it, and perform various calculations to optimize Pizza Runner's operations.
+Danny, the owner of Pizza Runner, is keen on leveraging data science to enhance the efficiency and performance of his pizza delivery business. He has shared a dataset containing information about runners, customer orders, and pizza details within the pizza_runner database schema. As a data scientist, my task is to analyze the data, clean it, and perform various calculations to optimize Pizza Runner's operations.
 
 **Objective:**
 The primary goal is to assist Danny in improving Pizza Runner's operations by addressing key areas such as pizza metrics, runner and customer experience, ingredient optimization, and pricing and ratings. Your solutions should provide actionable insights to enhance the overall performance and customer satisfaction of Pizza Runner.
