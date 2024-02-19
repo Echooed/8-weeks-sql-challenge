@@ -94,8 +94,7 @@ FROM
 GROUP BY
   sales.product_id,
   menu.product_name
-ORDER BY no_of_product DESC LIMIT 1
-;
+ORDER BY no_of_product DESC LIMIT 1;
 ```
 
 
@@ -221,7 +220,7 @@ SELECT
 FROM
   purchase_point
 GROUP BY
-  customer_id
+  customer_id;
 ```
 
 ```mysql
