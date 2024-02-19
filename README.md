@@ -1,11 +1,11 @@
-# 8-weeks-sql-challenge
-
+# 8-Week SQL Challenge
 
 ## Introduction
-This is a 8 weeks challenge created by Danny Ma. Shout out [Danny](https://www.linkedin.com/company/datawithdanny).
-You can access this challenge here: [8weekschallenge](https://8weeksqlchallenge.com).
+Welcome to the 8-Week SQL Challenge, curated by Danny Ma. A special shout out to [Danny](https://www.linkedin.com/company/datawithdanny) for crafting this engaging challenge. For access and participation, kindly visit the challenge website: [8weekschallenge](https://8weeksqlchallenge.com).
 
-This repository shows my ability and proficiency in tackling business problems using query language SQL. The case studies touch different business problem scenario and in different business context. I approached it in a adhoc request and delivery format(Question and Answer)
+This repository serves as a showcase of my expertise and proficiency in SQL query language. Through this challenge, I demonstrate my ability to utilize SQL to tackle diverse business problems effectively. The case studies presented encompass various business scenarios, providing a comprehensive platform to apply SQL skills. My approach involves addressing each challenge through a structured question and answer format, delivering solutions in an adroit and efficient manner.
+
+This endeavor underscores my commitment to continuous learning and problem-solving in the realm of data analytics and business intelligence.
 
 ## Table of contents
 ###### _Below is the content with the link to each case study_
