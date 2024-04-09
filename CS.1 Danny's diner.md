@@ -90,7 +90,8 @@ SELECT
   COUNT(sales.product_id) AS no_of_product
 FROM
   sales
-  JOIN menu ON sales.product_id = menu.product_id
+JOIN
+  menu ON sales.product_id = menu.product_id
 GROUP BY
   sales.product_id,
   menu.product_name
@@ -101,15 +102,21 @@ ORDER BY no_of_product DESC LIMIT 1;
 ```mysql
 -- 4. How many times was the most purchased item purchased by each customer?
 
-SELECT customer_id, product_name, COUNT(*) AS num_times_purchased FROM sales
-JOIN menu
-ON sales.product_id = menu.product_id
-WHERE sales.product_id = (SELECT sales.product_id FROM sales
-JOIN menu
-ON sales.product_id = menu.product_id
-GROUP BY sales.product_id
-ORDER BY count(*) DESC
-limit 1)
+SELECT
+  customer_id,
+  product_name,
+  COUNT(*) AS num_times_purchased
+FROM
+  sales
+JOIN
+  menu ON sales.product_id = menu.product_id
+WHERE
+  sales.product_id = (SELECT sales.product_id FROM sales
+    JOIN menu
+    ON sales.product_id = menu.product_id
+    GROUP BY sales.product_id
+    ORDER BY count(*) DESC
+    limit 1)
 GROUP BY customer_id, product_name;
 ```
 
@@ -117,30 +124,52 @@ GROUP BY customer_id, product_name;
 -- 5. Which item was the most popular for each customer?
 
 WITH count_product AS (
-    SELECT s.customer_id, m.product_name, COUNT(s.product_id) AS no_of_product,
-           ROW_NUMBER() OVER(PARTITION BY s.customer_id ORDER BY COUNT(s.product_id) DESC) AS row_num
-    FROM sales s
+    SELECT
+      s.customer_id,
+      m.product_name,
+      COUNT(s.product_id) AS no_of_product,
+      ROW_NUMBER() OVER(PARTITION BY s.customer_id ORDER BY COUNT(s.product_id) DESC) AS row_num
+    FROM
+      sales s
     JOIN menu m ON s.product_id = m.product_id
-    GROUP BY s.customer_id, m.product_name
+    GROUP BY
+      s.customer_id,
+      m.product_name
 )
-SELECT c.customer_id, c.product_name, c.no_of_product
-FROM count_product c
-WHERE c.row_num = 1;
+SELECT
+  c.customer_id,
+  c.product_name,
+  c.no_of_product
+FROM
+  count_product c
+WHERE
+  c.row_num = 1;
 ```
 
 ```mysql
 -- 6. Which item was the most popular for each customer?
 
 WITH count_product AS (
-    SELECT s.customer_id, m.product_name, COUNT(s.product_id) AS no_of_product,
-           ROW_NUMBER() OVER(PARTITION BY s.customer_id ORDER BY COUNT(s.product_id) DESC) AS row_num
-    FROM sales s
-    JOIN menu m ON s.product_id = m.product_id
-    GROUP BY s.customer_id, m.product_name
+    SELECT
+      s.customer_id,
+      m.product_name,
+      COUNT(s.product_id) AS no_of_product,
+      ROW_NUMBER() OVER(PARTITION BY s.customer_id ORDER BY COUNT(s.product_id) DESC) AS row_num
+    FROM
+      sales s
+    JOIN
+      menu m ON s.product_id = m.product_id
+    GROUP BY
+      s.customer_id, m.product_name
 )
-SELECT c.customer_id, c.product_name, c.no_of_product
-FROM count_product c
-WHERE c.row_num = 1;
+SELECT
+  c.customer_id,
+  c.product_name,
+  c.no_of_product
+FROM
+  count_product c
+WHERE
+  c.row_num = 1;
 ```
 
 ```mysql
@@ -151,11 +180,7 @@ WITH last_order_before_membership AS (
     s.customer_id,
     m.product_name,
     s.order_date,
-    ROW_NUMBER() OVER (
-      PARTITION BY s.customer_id
-      ORDER BY
-        s.order_date DESC
-    ) AS purchase_rank
+    ROW_NUMBER() OVER (PARTITION BY s.customer_id ORDER BY s.order_date DESC) AS purchase_rank
   FROM
     sales s
     JOIN menu m ON s.product_id = m.product_id
@@ -244,21 +269,26 @@ customer_points AS (
     FROM sales s
     JOIN menu m ON s.product_id = m.product_id
     JOIN members j ON s.customer_id = j.customer_id
-    WHERE s.order_date >= j.join_date
-      AND s.order_date < DATE_ADD(j.join_date, INTERVAL 1 WEEK)
+    WHERE
+        s.order_date >= j.join_date
+      AND
+        s.order_date < DATE_ADD(j.join_date, INTERVAL 1 WEEK)
       
 ),
 all_points AS (
     SELECT
-        customer_id,
-        SUM(CASE 
-            WHEN DATEDIFF(order_date, join_date) <= 7 THEN price * 20
+      customer_id,
+      SUM(CASE WHEN DATEDIFF(order_date, join_date) <= 7 THEN price * 20
             ELSE price * 10
-        END) AS total_points
-    FROM customer_points
-    GROUP BY customer_id
+      END) AS total_points
+    FROM
+      customer_points
+    GROUP BY
+      customer_id
 )
-SELECT customer_id, CONCAT(total_points, " ", "points") members_points FROM all_points;
+SELECT
+customer_id,
+CONCAT(total_points, " ", "points") members_points FROM all_points;
 ```
 
 ## Bonus question
@@ -292,27 +322,34 @@ Danny also requires further information about the ranking of customer products, 
 -- 2. Rank All The Things
 
 WITH joined_table AS (
-    SELECT sales.customer_id, 
-           sales.order_date, 
-           menu.product_name, 
-           menu.price,
+    SELECT
+      sales.customer_id, 
+      sales.order_date, 
+      menu.product_name, 
+      menu.price,
            CASE 
                WHEN sales.order_date < members.join_date THEN "N"
                WHEN sales.order_date >= members.join_date THEN "Y"			
                ELSE "N"
            END AS member
-    FROM sales 
-    JOIN menu ON sales.product_id = menu.product_id
-    LEFT JOIN members ON sales.customer_id = members.customer_id 
-    ORDER BY customer_id
+    FROM
+      sales 
+    JOIN
+      menu ON sales.product_id = menu.product_id
+    LEFT JOIN
+      members ON sales.customer_id = members.customer_id 
+    ORDER BY
+      customer_id
 )
-SELECT customer_id, 
-       order_date, 
-       product_name, 
-       price, 
-       member,
-       CASE WHEN member = "N" THEN "null"
-          ELSE RANK() OVER (PARTITION BY member, customer_id ORDER BY order_date, price DESC)
-       END AS ranking
-FROM joined_table;
+SELECT
+  customer_id, 
+  order_date, 
+  product_name, 
+  price,
+  member,
+  CASE WHEN member = "N" THEN "null"
+    ELSE RANK() OVER (PARTITION BY member, customer_id ORDER BY order_date, price DESC)
+  END AS ranking
+FROM
+  joined_table;
 ```
