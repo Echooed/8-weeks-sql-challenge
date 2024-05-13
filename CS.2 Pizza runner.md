@@ -96,13 +96,24 @@ e). *Bonus DML Challenges (DML = Data Manipulation Language)*
 #### Data investigation and cleaning
 The first course of action is to visually inspect the data tables before querying.
 
+### Customer_order Table
 ![image](https://github.com/Echooed/8-weeks-sql-challenge/assets/91009365/142fac44-21ec-4804-b5d8-7bb740548f9c)
+
+### Runner_order table
+![image](https://github.com/Echooed/8-weeks-sql-challenge/assets/91009365/f5b1fffe-3c63-4aff-a6e1-ec8d221d0f4f)
 
 ### Observations:
 * There is no uniformity in the exclusion column for the empty rows and null rows.
 * There is no uniformity in the extra column for the empty and null rows.
-The approach to cleaning this table is to create a temp table where the null and empty rows for each columns will be null uniformly.
+* The pickup_time column has null as a string.
+* The cancellation column lacks uniformity for empty rows.
+* The duration column has ununiform values with some values having minute, min or just numbers.
+* The null string and the different value style in the distance column are not appropriate.
 
+
+The approach to cleaning this table is to create a temp table where the null, empty rows and varying value style for each columns will be unified.
+
+### Cleaning customer_orders table
 ``` mysql
 -- Cleaned customer_orders Table CALLED customer_orders_temp(a temp table)
 -- change the "null" and " " string in the exclusion and extra table into NULL
@@ -129,7 +140,26 @@ SELECT * FROM customer_orders_temp;
 
 ![image](https://github.com/Echooed/8-weeks-sql-challenge/assets/91009365/df5772b2-0beb-44e5-9d0a-02600a9ce7e0)
 
+### Cleaning runner_orders table
 
+``` mysql
+DROP TABLE IF EXISTS pizza_runner.runner_orders_temps;
+CREATE TEMP TABLE runner_orders_temp AS
+SELECT 
+    order_id, 
+    runner_id,
+    CASE WHEN pickup_time = 'null' THEN NULL ELSE pickup_time END AS pickup_time,
+    CASE WHEN distance = 'null' THEN NULL 
+         WHEN distance LIKE '%km' THEN REGEXP_REPLACE(distance, r'km$', '')
+         ELSE distance END AS distance,
+    CASE WHEN duration = 'null' THEN NULL 
+         WHEN duration LIKE '%mins' THEN REGEXP_REPLACE(REGEXP_REPLACE(duration, r'minutes$', ''), r'mins$', '')
+         WHEN duration LIKE '%minute' THEN REGEXP_REPLACE(duration, r'minute$', '')
+         WHEN duration LIKE '%minutes' THEN REGEXP_REPLACE(duration, r'minutes$', '')
+         ELSE duration END AS duration,
+    NULLIF(NULLIF(cancellation, 'null'), '') AS cancellation
+FROM pizza_runner.runner_orders;
+```
 
 
 
