@@ -94,22 +94,40 @@ e). *Bonus DML Challenges (DML = Data Manipulation Language)*
 
 ### Queries
 #### Data investigation and cleaning
-The first course of action is to inspect the data tables been presented before querying.
-There are 5 tables in the pizza runner database. Each table will undergo:
-1. Row count inspection
-2. Duplicate and record frequency checks
-3. Single column frequency count
-4. Summary statistic
-5. Check cumulative Distribution
-6. Investigate outlier
-7. Remove outlier
-8. Create Temp table
-9. Frequency Distribution
+The first course of action is to visually inspect the data tables before querying.
 
-At the end of this data general data investigation and cleaning, I will have an overview understanding of what the data is and I will I a clean and optimize data to query all request effectively.
+![image](https://github.com/Echooed/8-weeks-sql-challenge/assets/91009365/142fac44-21ec-4804-b5d8-7bb740548f9c)
 
+### Observations:
+* There is no uniformity in the exclusion column for the empty rows and null rows.
+* There is no uniformity in the extra column for the empty and null rows.
+The approach to cleaning this table is to create a temp table where the null and empty rows for each columns will be null uniformly.
 
+``` mysql
+-- Cleaned customer_orders Table CALLED customer_orders_temp(a temp table)
+-- change the "null" and " " string in the exclusion and extra table into NULL
+DROP TABLE IF EXISTS pizza_runner.customer_orders_temp; 
+CREATE TEMPORARY TABLE customer_orders_temp AS (
+SELECT
+    order_id,
+    customer_id,
+    pizza_id,
+    order_time,
+    CASE
+	      WHEN exclusions = '' 
+          OR exclusions = 'null' THEN NULL 
+	      ELSE exclusions
+    END AS exclusions,
+    CASE 
+		WHEN extras = 'null'
+        OR extras = '' THEN NULL ELSE extras
+    END AS extras
+FROM pizza_runner.customer_orders 
+);
+SELECT * FROM customer_orders_temp;
+```
 
+![image](https://github.com/Echooed/8-weeks-sql-challenge/assets/91009365/df5772b2-0beb-44e5-9d0a-02600a9ce7e0)
 
 
 
@@ -126,7 +144,7 @@ FROM
 ### ==> The total number  of orders is 14
 
 
-### 2). How many uique customer orders were made?
+### 2). How many unique customer orders were made?
 ``` mysql
 SELECT
   COUNT(DISTINCT order_id) AS no_of_orders
