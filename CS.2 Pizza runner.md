@@ -122,7 +122,7 @@ FROM
 ### ==> The total number  of orders is 14
 
 
-#### 2). How many uique customer orders were made?
+### 2). How many uique customer orders were made?
 ``` mysql
 SELECT
   COUNT(DISTINCT order_id) AS no_of_orders
@@ -130,6 +130,6 @@ FROM
   customer_orders GROUP BY customer_id;
 
 ```
-#### ==> 10 unique order were made.
+##### ==> 10 unique order were made.
 
 
