@@ -148,18 +148,19 @@ CREATE TEMP TABLE runner_orders_temp AS
 SELECT 
     order_id, 
     runner_id,
-    CASE WHEN pickup_time = 'null' THEN NULL ELSE pickup_time END AS pickup_time,
-    CASE WHEN distance = 'null' THEN NULL 
+    PARSE_DATETIME('%Y-%m-%d %H:%M:%S', (CASE WHEN pickup_time = 'null' THEN NULL ELSE pickup_time END)) AS pickup_time,
+    CAST((CASE WHEN distance = 'null' THEN NULL 
          WHEN distance LIKE '%km' THEN REGEXP_REPLACE(distance, r'km$', '')
-         ELSE distance END AS distance,
-    CASE WHEN duration = 'null' THEN NULL 
+         ELSE distance END) AS FLOAT64) AS distance,
+    CAST((CASE WHEN duration = 'null' THEN NULL 
          WHEN duration LIKE '%mins' THEN REGEXP_REPLACE(REGEXP_REPLACE(duration, r'minutes$', ''), r'mins$', '')
          WHEN duration LIKE '%minute' THEN REGEXP_REPLACE(duration, r'minute$', '')
          WHEN duration LIKE '%minutes' THEN REGEXP_REPLACE(duration, r'minutes$', '')
-         ELSE duration END AS duration,
+         ELSE duration END) AS INT64) AS duration,
     NULLIF(NULLIF(cancellation, 'null'), '') AS cancellation
 FROM pizza_runner.runner_orders;
 ```
+![image](https://github.com/Echooed/8-weeks-sql-challenge/assets/91009365/1b4a3863-649b-437d-8ada-511544630f4e)
 
 
 
