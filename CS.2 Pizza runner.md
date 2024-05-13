@@ -114,12 +114,12 @@ SELECT
     pizza_id,
     order_time,
     CASE
-	      WHEN exclusions = '' 
-          OR exclusions = 'null' THEN NULL 
-	      ELSE exclusions
+	WHEN exclusions = ''
+	OR exclusions = 'null' THEN NULL
+	ELSE exclusions
     END AS exclusions,
-    CASE 
-		WHEN extras = 'null'
+    CASE
+	WHEN extras = 'null'
         OR extras = '' THEN NULL ELSE extras
     END AS extras
 FROM pizza_runner.customer_orders 
