@@ -165,9 +165,9 @@ FROM pizza_runner.runner_orders;
 
 
 
-``` mysql
--- 1. How many pizzas were ordered?
 
+### 1). How many pizzas were ordered?
+```mysql
 SELECT
   COUNT(order_id) AS number_of_orders
 FROM
@@ -176,6 +176,8 @@ FROM
 ![image](https://github.com/Echooed/8-weeks-sql-challenge/assets/91009365/f124f6c0-a507-471b-b9ad-9958e21b2981)
 
 ##### ==> The total number  of orders is 14
+
+
 
 
 ### 2). How many unique customer orders were made?
@@ -214,4 +216,25 @@ GROUP BY
 * Runner 3 has 1 successful delivered order
 
 
+
+
+### 4). How many of each type of pizza was delivered?
+``` mysql
+SELECT
+  pizza_name,
+  COUNT(c.pizza_id) AS no_of_successful_orders
+FROM
+  pizza_runner.customer_orders c 
+  JOIN
+    pizza_runner.runner_orders r ON c.order_id = r.order_id 
+  JOIN
+    pizza_runner.pizza_names p ON c.pizza_id = p.pizza_id
+WHERE
+  r.distance != 'null' 
+GROUP BY
+  p.pizza_id, p.pizza_name;
+```
+![image](https://github.com/Echooed/8-weeks-sql-challenge/assets/91009365/d03a40dd-791a-4051-ade8-341b734bcaae)
+
+#### ==> There are 3 delivered vegetarians' pizzas and 9 Meatlovers' pizzas.
 
