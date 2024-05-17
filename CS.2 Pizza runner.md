@@ -195,14 +195,23 @@ FROM
 ### 3). how many successfull orders were successfully delivered by each runner?
 ``` mysql
 SELECT
-	runner_id,
-	COUNT(order_id)
+  runner_id,
+  COUNT(order_id)
 FROM
-pizza_runner.runner_orders
-WHERE distance != 'null'
-GROUP BY runner_id;
-
+  pizza_runner.runner_orders
+WHERE
+  distance != 'null'
+GROUP BY
+  runner_id;
 ```
+
+![image](https://github.com/Echooed/8-weeks-sql-challenge/assets/91009365/f932d442-d317-4cf4-b78e-2bcb00599524)
+
+##### ==> 
+
+* Runner 1 has 4 successful delivered orders
+* Runner 2 has 3 successful delivered orders
+* Runner 3 has 1 successful delivered order
 
 
 
