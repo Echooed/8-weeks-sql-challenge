@@ -164,15 +164,18 @@ FROM pizza_runner.runner_orders;
 
 
 
+
 ``` mysql
 -- 1. How many pizzas were ordered?
 
 SELECT
   COUNT(order_id) AS number_of_orders
 FROM
-  customer_orders;
+  pizza_runner.customer_orders;
 ```
-### ==> The total number  of orders is 14
+![image](https://github.com/Echooed/8-weeks-sql-challenge/assets/91009365/f124f6c0-a507-471b-b9ad-9958e21b2981)
+
+#### ==> The total number  of orders is 14
 
 
 ### 2). How many unique customer orders were made?
@@ -180,9 +183,10 @@ FROM
 SELECT
   COUNT(DISTINCT order_id) AS no_of_orders
 FROM
-  customer_orders GROUP BY customer_id;
-
+  pizza_runner.customer_orders;
 ```
-##### ==> 10 unique order were made.
+![image](https://github.com/Echooed/8-weeks-sql-challenge/assets/91009365/b5016afc-94bf-4b83-a6f5-9ca75b512230)
+
+#### ==> 10 unique order were made.
 
 
