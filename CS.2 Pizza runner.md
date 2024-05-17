@@ -175,18 +175,34 @@ FROM
 ```
 ![image](https://github.com/Echooed/8-weeks-sql-challenge/assets/91009365/f124f6c0-a507-471b-b9ad-9958e21b2981)
 
-#### ==> The total number  of orders is 14
+##### ==> The total number  of orders is 14
 
 
 ### 2). How many unique customer orders were made?
 ``` mysql
+
 SELECT
   COUNT(DISTINCT order_id) AS no_of_orders
 FROM
   pizza_runner.customer_orders;
+
 ```
 ![image](https://github.com/Echooed/8-weeks-sql-challenge/assets/91009365/b5016afc-94bf-4b83-a6f5-9ca75b512230)
 
-#### ==> 10 unique order were made.
+##### ==> 10 unique order were made.
+
+
+### 3). how many successfull orders were successfully delivered by each runner?
+``` mysql
+SELECT
+	runner_id,
+	COUNT(order_id)
+FROM
+pizza_runner.runner_orders
+WHERE distance != 'null'
+GROUP BY runner_id;
+
+```
+
 
 
